@@ -1,5 +1,4 @@
 
-from typing import List, Type, get_args, get_origin
 
 from pydantic import BaseModel
 
@@ -18,7 +17,7 @@ def generate_schema_prompt(schema) -> str:
             annotation_origin = get_origin(field_annotation)
             annotation_arguments = get_args(field_annotation)
 
-            if annotation_origin in {list, List}:
+            if annotation_origin in {list}:
                 payload.append(f'"{key}": {annotation_arguments[0].__name__}[]')
             elif annotation_origin == None:
                 payload.append(

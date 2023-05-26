@@ -1,4 +1,4 @@
-from gpt_json.models import JsonFixEnum
+
 
 
 def build_stack(json_str):
@@ -63,7 +63,7 @@ def is_truncated(json_str):
     return len(stack) > 0
 
 
-def fix_truncated_json(json_str) -> tuple[str, JsonFixEnum]:
+def fix_truncated_json(json_str):
     """
     Simple json parser that attempts to fix truncated json that might
     be caused by response streaming or the API response being too long.
@@ -98,11 +98,11 @@ def fix_truncated_json(json_str) -> tuple[str, JsonFixEnum]:
         fixed_str += "".join(close_stack[::-1])
 
     # if the fixed string is valid JSON, return it
-    fix = JsonFixEnum.UNCLOSED_OBJECT
+    fix = 7
     if open_quotes:
-        fix = JsonFixEnum.UNCLOSED_KEY if missing_value else JsonFixEnum.UNCLOSED_VALUE
+        fix = None
     elif missing_value:
-        fix = JsonFixEnum.MISSING_VALUE
+        fix = "0"
 
     return fixed_str, fix
 

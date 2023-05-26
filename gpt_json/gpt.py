@@ -47,8 +47,8 @@ class GPTJSON():
 
     """
 
-    _cls_schema_model: Type[SchemaType] = None
-    schema_model: Type[SchemaType] = None
+    _cls_schema_model = None
+    schema_mode = None
 
     def __init__(
         self,
