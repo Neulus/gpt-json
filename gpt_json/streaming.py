@@ -19,12 +19,12 @@ class StreamEventEnum(Enum):
 
 @dataclass
 class StreamingObject(Generic[SchemaType]):
-    updated_key: str | None
-    value_change: str | None
+    updated_key: str
+    value_change: str
     event: StreamEventEnum
     partial_obj: SchemaType
 
-    schema_model: Type[SchemaType] | None = None
+    schema_model = None
 
     def __class_getitem__(cls, item):
         cls.schema_model = item
@@ -32,7 +32,7 @@ class StreamingObject(Generic[SchemaType]):
 
 
 def _create_schema_from_partial(
-    schema_model: Type[SchemaType], partial: dict[str, Any]
+    schema_model, partial
 ):
     """Creates a pydantic model from a dictionary that only partially defines model values.
     Only supports string field types for now.
@@ -46,10 +46,10 @@ def _create_schema_from_partial(
 
 
 def prepare_streaming_object(
-    schema_model: Type[SchemaType],
-    current_partial_raw: dict[str, Any],
-    previous_partial: StreamingObject[SchemaType] | None,
-    proposed_event: StreamEventEnum,
+    schema_model,
+    current_partial_raw,
+    previous_partial,
+    proposed_event,
 ) -> StreamingObject[SchemaType]:
     """Prepares a StreamingObject for the next iteration of the stream generator
 
@@ -96,7 +96,7 @@ def prepare_streaming_object(
     )
 
 
-def parse_streamed_json(substring: str) -> tuple[dict, StreamEventEnum]:
+def parse_streamed_json(substring: str):
     fixed_json_str, fix_reason = fix_truncated_json(substring)
 
     event = StreamEventEnum.KEY_UPDATED

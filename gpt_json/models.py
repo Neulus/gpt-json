@@ -43,7 +43,7 @@ class FixTransforms:
     How a gpt payload was modified to be valid
     """
 
-    fixed_truncation: JsonFixEnum | None = None
+    fixed_truncation: JsonFixEnum = None
     fixed_bools: bool = False
 
 

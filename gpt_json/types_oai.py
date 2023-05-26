@@ -4,18 +4,18 @@ from pydantic import BaseModel
 
 
 class ChatCompletionDelta(BaseModel):
-    content: str | None
-    role: str | None
+    content: str
+    role: str 
 
 
 class ChatCompletionChunkChoice(BaseModel):
     delta: ChatCompletionDelta
-    finish_reason: str | None
+    finish_reason: str
     index: int
 
 
 class ChatCompletionChunk(BaseModel):
-    choices: list[ChatCompletionChunkChoice]
+    choices: list
     created: int
     id: str
     model: str

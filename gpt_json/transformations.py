@@ -63,7 +63,7 @@ def is_truncated(json_str):
     return len(stack) > 0
 
 
-def fix_truncated_json(json_str) -> tuple[str, JsonFixEnum | None]:
+def fix_truncated_json(json_str) -> tuple[str, JsonFixEnum]:
     """
     Simple json parser that attempts to fix truncated json that might
     be caused by response streaming or the API response being too long.
