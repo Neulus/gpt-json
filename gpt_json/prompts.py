@@ -4,7 +4,7 @@ from typing import List, Type, get_args, get_origin
 from pydantic import BaseModel
 
 
-def generate_schema_prompt(schema: Type[BaseModel] | list[Type[BaseModel]]) -> str:
+def generate_schema_prompt(schema) -> str:
     """
     Converts the pydantic schema into a text representation that can be embedded
     into the prompt payload.
