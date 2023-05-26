@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Uniom
 
 from pydantic import BaseModel
 

@@ -1,13 +1,12 @@
 import json
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Generic, Type, TypeVar
 
 from pydantic import BaseModel
 
 from gpt_json.transformations import JsonFixEnum, fix_truncated_json
 
-SchemaType = TypeVar("SchemaType", bound=BaseModel)
+SchemaType = BaseModel
 
 
 class StreamEventEnum(Enum):
@@ -18,7 +17,7 @@ class StreamEventEnum(Enum):
 
 
 @dataclass
-class StreamingObject(Generic[SchemaType]):
+class StreamingObject():
     updated_key: str
     value_change: str
     event: StreamEventEnum
@@ -50,7 +49,7 @@ def prepare_streaming_object(
     current_partial_raw,
     previous_partial,
     proposed_event,
-) -> StreamingObject[SchemaType]:
+):
     """Prepares a StreamingObject for the next iteration of the stream generator
 
     :param schema_model: The pydantic model for the full schema being streamed

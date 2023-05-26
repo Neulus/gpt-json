@@ -2,16 +2,6 @@ import logging
 from dataclasses import replace
 from json import loads as json_loads
 from json.decoder import JSONDecodeError
-from typing import (
-    Any,
-    AsyncIterator,
-    Generic,
-    List,
-    Type,
-    TypeVar,
-    get_args,
-    get_origin,
-)
 
 import backoff
 import openai
@@ -46,12 +36,12 @@ def handle_backoff(details):
     )
 
 
-SchemaType = TypeVar("SchemaType", bound=BaseModel)
+SchemaType = BaseModel
 
 SCHEMA_PROMPT_TEMPLATE_KEY = "json_schema"
 
 
-class GPTJSON(Generic[SchemaType]):
+class GPTJSON():
     """
     A wrapper over GPT that provides basic JSON parsing and response handling.
 
@@ -62,8 +52,8 @@ class GPTJSON(Generic[SchemaType]):
 
     def __init__(
         self,
-        api_key: str | None = None,
-        model: GPTModelVersion | str = GPTModelVersion.GPT_4,
+        api_key: str = None,
+        model: GPTModelVersion = GPTModelVersion.GPT_4,
         auto_trim: bool = False,
         auto_trim_response_overhead: int = 0,
         # For messages that are relatively deterministic
@@ -122,10 +112,10 @@ class GPTJSON(Generic[SchemaType]):
 
     async def run(
         self,
-        messages: list[GPTMessage],
-        max_response_tokens: int | None = None,
-        format_variables: dict[str, Any] | None = None,
-    ) -> tuple[SchemaType | list[SchemaType], FixTransforms] | tuple[None, None]:
+        messages: list,
+        max_response_tokens: int = None,
+        format_variables: dict[str, Any] = None,
+    ):
         """
         :param messages: List of GPTMessage objects to send to the API
         :param max_response_tokens: Maximum number of tokens allowed in the response
@@ -178,10 +168,10 @@ class GPTJSON(Generic[SchemaType]):
 
     async def stream(
         self,
-        messages: list[GPTMessage],
-        max_response_tokens: int | None = None,
-        format_variables: dict[str, Any] | None = None,
-    ) -> AsyncIterator[StreamingObject[SchemaType]]:
+        messages: list,
+        max_response_tokens: int = None,
+        format_variables = None,
+    ):
         """
         See `run` for documentation. This method is an async generator wrapper around `run` that streams partial results
         instead of returning them all at once.
@@ -290,8 +280,8 @@ class GPTJSON(Generic[SchemaType]):
 
     async def submit_request(
         self,
-        messages: list[GPTMessage],
-        max_response_tokens: int | None,
+        messages: list,
+        max_response_tokens: int,
         stream: bool = False,
     ):
         logger.debug("------- START MESSAGE ----------")
@@ -317,7 +307,7 @@ class GPTJSON(Generic[SchemaType]):
         )
 
     def fill_message_template(
-        self, message: GPTMessage, format_variables: dict[str, Any]
+        self, message: GPTMessage, format_variables
     ):
         auto_format = {
             SCHEMA_PROMPT_TEMPLATE_KEY: self.schema_prompt,
@@ -341,7 +331,7 @@ class GPTJSON(Generic[SchemaType]):
     def message_to_dict(self, message: GPTMessage):
         return {"role": message.role.value, "content": message.content}
 
-    def trim_messages(self, messages: list[GPTMessage], n: int):
+    def trim_messages(self, messages: list, n: int):
         """
         Returns a list of messages with a total token count less than n tokens,
         cropping the last message if needed.

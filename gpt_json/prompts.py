@@ -1,4 +1,4 @@
-from types import UnionType
+
 from typing import List, Type, get_args, get_origin
 
 from pydantic import BaseModel
@@ -20,7 +20,7 @@ def generate_schema_prompt(schema: Type[BaseModel] | list[Type[BaseModel]]) -> s
 
             if annotation_origin in {list, List}:
                 payload.append(f'"{key}": {annotation_arguments[0].__name__}[]')
-            elif annotation_origin == UnionType:
+            elif annotation_origin == None:
                 payload.append(
                     f'"{key}": {" | ".join([arg.__name__.lower() for arg in annotation_arguments])}'
                 )
